@@ -1,5 +1,6 @@
 {
   "pages":[
+    "pages/userRegist/regist",
     "pages/index/index"
   ],
   "window":{
