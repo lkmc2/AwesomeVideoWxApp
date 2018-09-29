@@ -1,14 +1,14 @@
 {
 	"description": "项目配置文件。",
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
 		"newFeature": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "1.9.94",
+	"libVersion": "2.3.0",
 	"appid": "wx5886bf30792d93ce",
 	"projectname": "AwesomeVideo",
 	"isGameTourist": false,
