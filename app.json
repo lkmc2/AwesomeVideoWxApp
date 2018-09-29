@@ -8,5 +8,6 @@
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "倾心短视频",
     "navigationBarTextStyle":"black"
-  }
+  },
+  "debug": true
 }
