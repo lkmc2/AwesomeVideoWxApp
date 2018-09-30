@@ -1,5 +1,6 @@
 {
   "pages":[
+    "pages/userLogin/login",
     "pages/userRegist/regist",
     "pages/index/index"
   ],
