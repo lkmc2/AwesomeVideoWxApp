@@ -94,7 +94,7 @@ Page({
   },
 
   // 跳转到注册页事件
-  goRegistBtn: () => {
+  goRegistPage: () => {
     wx.redirectTo({
       url: '../userRegist/regist',
     })

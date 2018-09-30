@@ -44,9 +44,11 @@ page {
 .loginBtn {
     width: 80%;
     margin-top: 35px;
+    font-size: 16px;
 }
 
 .goLoginBtn {
     width: 80%;
     margin-top: 15px;
+    font-size: 16px;
 }
