@@ -67,6 +67,11 @@ Page({
 
             // 存储用户信息到本地
             app.userInfo = res.data.data;
+
+            // 跳转到我的页面
+            wx.redirectTo({
+              url: '../mine/mine',
+            })
             // app.setGlobalUserInfo(res.data.data);
 
             // TODO 页面跳转
