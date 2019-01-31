@@ -42,5 +42,42 @@ Page({
         }
       }
     })
+  },
+  // 更换头像
+  changeFace: function() {
+    // 选择图片
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['compressed'], // 压缩图片
+      sourceType: ['album'], // 从相册中选取
+      success(res) {
+        // 上传到微信服务器的临时图片数组
+        const tempFilePaths = res.tempFilePaths
+
+        // 弹出进度条
+        wx.showLoading({
+          title: '上传中……',
+        })
+
+        let serverUrl = app.serverUrl;
+
+        // 上传图片
+        wx.uploadFile({
+          url: serverUrl + '/user/uploadFace?userId=' + app.userInfo.id,
+          filePath: tempFilePaths[0],
+          name: 'file',
+          success(res) {
+            const data = res.data
+
+            // 隐藏进度条
+            wx.hideLoading();
+            wx.showToast({
+              title: '上传成功！',
+              icon: 'success'
+            })
+          }
+        })
+      }
+    })
   }
 })
