@@ -11,8 +11,8 @@ Page({
   },
   // 退出登陆
   logout: function() {
-    var user = app.userInfo;
-    let serverUrl = app.serverUrl;
+    const user = app.userInfo;
+    const serverUrl = app.serverUrl;
 
     // 调用后端
     wx.request({
@@ -45,6 +45,8 @@ Page({
   },
   // 更换头像
   changeFace: function() {
+    const that = this;
+
     // 选择图片
     wx.chooseImage({
       count: 1,
@@ -60,7 +62,7 @@ Page({
           title: '上传中……',
         })
 
-        let serverUrl = app.serverUrl;
+        const serverUrl = app.serverUrl;
 
         // 上传图片
         wx.uploadFile({
@@ -68,7 +70,7 @@ Page({
           filePath: tempFilePaths[0],
           name: 'file',
           success(res) {
-            var data = JSON.parse(res.data);
+            const data = JSON.parse(res.data);
 
             // 隐藏进度条
             wx.hideLoading();
@@ -77,6 +79,12 @@ Page({
               wx.showToast({
                 title: '上传成功！',
                 icon: 'success'
+              })
+
+              const imageUrl = data.data;
+              // 设置头像到页面
+              that.setData({
+                faceUrl: serverUrl + imageUrl
               })
             } else {
               wx.showToast({
