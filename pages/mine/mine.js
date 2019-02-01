@@ -23,7 +23,7 @@ Page({
     // 调用后端
     wx.request({
       url: serverUrl + '/user/query?userId=' + user.id,
-      method: "get",
+      method: "POST",
       header: {
         'content-type': 'application/json' // 默认值
       },
