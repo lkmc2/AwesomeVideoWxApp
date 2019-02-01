@@ -29,7 +29,6 @@
       <label class='info-items'>{{fansCounts}} 粉丝</label>
       <label class='info-items'>{{followCounts}} 关注</label>
       <label class='info-items'>{{receiveLikeCounts}} 称赞</label>
-      <label class='info-items'>{{}}</label>
     </view>
   </view>
 
@@ -47,19 +46,19 @@
   <view class='container-video-list'></view>
 
   <view hidden='{{myWorkFlag}}'>
-    <block wx:for="{{myVideoList}}">
+    <block wx:for="{{myVideoList}}" wx:key="key">
       <image src='{{serverUrl}}{{item.coverPath}}' class='videoImage' mode='aspectFill' bindtap='showVideo' data-arrindex='{{index}}'></image>
     </block>
   </view>
 
   <view hidden='{{myLikesFlag}}'>
-    <block wx:for="{{likeVideoList}}">
+    <block wx:for="{{likeVideoList}}" wx:key="key">
       <image src='{{serverUrl}}{{item.coverPath}}' class='videoImage' mode='aspectFill' bindtap='showVideo' data-arrindex='{{index}}'></image>
     </block>
   </view>
 
   <view hidden='{{myFollowFlag}}'>
-    <block wx:for="{{followVideoList}}">
+    <block wx:for="{{followVideoList}}" wx:key="key">
       <image src='{{serverUrl}}{{item.coverPath}}' class='videoImage' mode='aspectFill' bindtap='showVideo' data-arrindex='{{index}}'></image>
     </block>
   </view>

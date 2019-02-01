@@ -4,10 +4,51 @@ const app = getApp()
 Page({
   data: {
     isMe: true,
-    faceUrl: "../resource/images/noneface.png"
+    faceUrl: "../resource/images/noneface.png",
+    nickname: '',
+    fansCounts: 0,
+    followCounts: 0,
+    receiveLikeCounts: 0
   },
-  onLoad: function(params) {
+  // 页面加载时加载用户数据到本地
+  onLoad: function() {
+    const that = this;
+    const user = app.userInfo;
+    const serverUrl = app.serverUrl;
 
+    wx.showLoading({
+      title: '请等待...',
+    });
+
+    // 调用后端
+    wx.request({
+      url: serverUrl + '/user/query?userId=' + user.id,
+      method: "get",
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success: function (res) {
+        console.log(res.data);
+        wx.hideLoading();
+        if (res.data.status == 200) {
+          const userInfo = res.data.data;
+
+
+          let faceUrl = "../resource/images/noneface.png";
+          if (userInfo.faceImage) {
+            faceUrl = serverUrl + userInfo.faceImage
+          }
+
+          that.setData({
+            faceUrl: faceUrl,
+            nickname: userInfo.nickname,
+            fansCounts: userInfo.fansCounts,
+            followCounts: userInfo.followCounts,
+            receiveLikeCounts: userInfo.receiveLikeCounts
+          })
+        }
+      }
+    })
   },
   // 退出登陆
   logout: function() {
