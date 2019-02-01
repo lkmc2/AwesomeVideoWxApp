@@ -53,6 +53,7 @@ Page({
       success(res) {
         // 上传到微信服务器的临时图片数组
         const tempFilePaths = res.tempFilePaths
+        // console.log(tempFilePaths)
 
         // 弹出进度条
         wx.showLoading({
@@ -67,14 +68,21 @@ Page({
           filePath: tempFilePaths[0],
           name: 'file',
           success(res) {
-            const data = res.data
+            var data = JSON.parse(res.data);
 
             // 隐藏进度条
             wx.hideLoading();
-            wx.showToast({
-              title: '上传成功！',
-              icon: 'success'
-            })
+
+            if (data.status == 200) {
+              wx.showToast({
+                title: '上传成功！',
+                icon: 'success'
+              })
+            } else {
+              wx.showToast({
+                title: data.msg
+              })
+            }
           }
         })
       }
