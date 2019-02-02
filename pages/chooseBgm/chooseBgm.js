@@ -2,12 +2,19 @@ const app = getApp()
 
 Page({
     data: {
-      bgmList: [],
-      serverUrl: '',
-      poster: '/poster/cover.jpg'
+      bgmList: [], // 背景乐列表
+      serverUrl: '', // 服务器地址
+      poster: '/poster/cover.jpg', // 音乐封面
+      videoParams: {} // 从mine页面传来的参数
     },
-    onLoad: function () {
+    onLoad: function (params) {
       const that = this;
+      // console.log(params);
+
+      // 获取从mine页面传来的参数
+      that.setData({
+        videoParams: params
+      })
 
       // 弹出进度条
       wx.showLoading({
@@ -33,6 +40,50 @@ Page({
             that.setData({
               bgmList: bgmList,
               serverUrl: serverUrl
+            })
+          }
+        }
+      })
+    },
+    // 上传背景乐
+    upload: function(e) {
+      const that = this;
+
+      // 获取界面上的属性(背景乐id、视频描述)
+      const bgmId = e.detail.value.bgmId;
+      const desc = e.detail.value.desc;
+
+      const duration = that.data.videoParams.duration; // 播放时长
+      const tempHeight = that.data.videoParams.tempHeight; // 视频宽
+      const tempWidth = that.data.videoParams.tempWidth; // 视频高
+      const tempVideoUrl = that.data.videoParams.tempVideoUrl; // 视频临时地址
+      const tempCoverUrl = that.data.videoParams.tempCoverUrl; // 视频封面图
+
+      const serverUrl = app.serverUrl;
+
+      // 上传短视频
+      wx.uploadFile({
+        url: serverUrl + '/video/upload',
+        formData: {
+          userId: app.userInfo.id,
+          bgmId: bgmId,
+          desc: desc,
+          videoSeconds: duration,
+          videoWidth: tempHeight,
+          videoHeight: tempWidth
+        },
+        filePath: tempVideoUrl,
+        name: 'file',
+        success(res) {
+          // const data = JSON.parse(res.data);
+          console.log(res);
+          // 隐藏进度条
+          wx.hideLoading();
+
+          if (data.status == 200) {
+            wx.showToast({
+              title: '上传成功！',
+              icon: 'success'
             })
           }
         }

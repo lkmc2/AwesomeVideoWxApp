@@ -105,7 +105,7 @@ Page({
 
         const serverUrl = app.serverUrl;
 
-        // 上传图片
+        // 上传头像
         wx.uploadFile({
           url: serverUrl + '/user/uploadFace?userId=' + app.userInfo.id,
           filePath: tempFilePaths[0],
@@ -155,7 +155,7 @@ Page({
         const tempVideoUrl = res.tempFilePath; // 视频临时地址
         const tempCoverUrl = res.thumbTempFilePath; // 视频封面图
 
-        if (duration > 5) {
+        if (duration > 11) {
           wx.showToast({
             title: '视频长度不能超过10秒…',
             icon: 'none',
@@ -168,7 +168,14 @@ Page({
             duration: 2500
           })
         } else {
-          // 打开选择bgm背景乐的页面
+          // 打开选择bgm背景乐的页面，并携带参数给下一个页面
+          wx.navigateTo({
+            url: '../chooseBgm/chooseBgm?duration=' + duration
+              + '&tempHeight=' + tempHeight
+              + '&tempWidth=' + tempWidth
+              + '&tempVideoUrl=' + tempVideoUrl
+              + '&tempCoverUrl=' + tempCoverUrl
+          })
         }
       }
     })
