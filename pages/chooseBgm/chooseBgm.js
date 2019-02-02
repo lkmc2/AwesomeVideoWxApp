@@ -75,7 +75,7 @@ Page({
         filePath: tempVideoUrl,
         name: 'file',
         success(res) {
-          // const data = JSON.parse(res.data);
+          const data = JSON.parse(res.data);
           console.log(res);
           // 隐藏进度条
           wx.hideLoading();
@@ -83,9 +83,22 @@ Page({
           if (data.status == 200) {
             wx.showToast({
               title: '上传成功！',
-              icon: 'success'
+              icon: 'success',
+              duration: 2000,
+              success: function () {
+                setTimeout(function () {
+                  // 返回上一页
+                  wx.navigateBack({
+                    delta: 1
+                  })
+                }, 2000) //延迟时间
+              }
             })
-          }
+          } else {
+            wx.showToast({
+              title: data.msg
+            })
+          } 
         }
       })
     }
