@@ -9,15 +9,27 @@ Page({
   // 页面加载
   onLoad: function (params) {
     const that = this;
+    const serverUrl = app.serverUrl;
 
-    // 初始化搜索框
-    WxSearch.init(
-      that,  // 本页面一个引用
-      ['杭州', '嘉兴', "海宁", "桐乡", '宁波', '金华'], // 热点搜索推荐，[]表示不使用
-      [],// 搜索匹配，[]表示不使用
-      that.mySearchFunction, // 提供一个搜索回调函数
-      that.myGobackFunction //提供一个返回回调函数
-    );
+    // 查询热搜词
+    wx.request({
+      url: serverUrl + '/video/hot',
+      method: "POST",
+      success: function(res) {
+        console.log(res);
+        // 获取热搜词列表
+        const hotList = res.data.data;
+
+        // 初始化搜索框
+        WxSearch.init(
+          that,  // 本页面一个引用
+          hotList, // 热点搜索推荐，[]表示不使用
+          hotList, // 搜索匹配，[]表示不使用
+          that.mySearchFunction, // 提供一个搜索回调函数
+          that.myGobackFunction //提供一个返回回调函数
+        );
+      }
+    })
   },
   // [搜索框] 转发函数，固定部分，直接拷贝即可
   wxSearchInput: WxSearch.wxSearchInput,  // 输入变化时的操作
