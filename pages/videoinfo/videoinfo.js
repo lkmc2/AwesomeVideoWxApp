@@ -10,5 +10,12 @@ Page({
     var that = this;
 
     
+  },
+  // 展示搜索页面
+  showSearch: function() {
+    // 跳转到搜索视频页面
+    wx.navigateTo({
+      url: '../searchVideo/searchVideo',
+    })
   }
 })
