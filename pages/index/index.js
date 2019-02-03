@@ -38,6 +38,27 @@ Page({
         wx.hideLoading();
 
         console.log(res)
+
+        // 判断当前页currentPage是否是第一页，如果是第一页，那么设置videoList为空
+        if (currentPage === 1) {
+          that.setData({
+            videoList: []
+          })
+        }
+
+        // 加载新数据
+
+        // 新视频列表数据
+        let videoList = res.data.data.rows;
+        // 原视频列表数据
+        let oldVideoList = that.data.videoList;
+         
+        that.setData({
+          videoList: oldVideoList.concat(videoList),
+          currentPage: currentPage,
+          totalPage: res.data.data.total,
+          serverUrl: serverUrl
+        })
       }
     })
   }
