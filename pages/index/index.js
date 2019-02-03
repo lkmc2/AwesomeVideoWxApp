@@ -22,6 +22,12 @@ Page({
 
     // 获取当前页数
     const currentPage = that.data.currentPage;
+    // 获取所有视频列表分页信息
+    that.getAllVideoList(currentPage);
+  },
+  // 获取所有视频列表分页信息
+  getAllVideoList: function (currentPage) {
+    var that = this;
     const serverUrl = app.serverUrl;
 
     // 显示进度条
@@ -33,7 +39,7 @@ Page({
     wx.request({
       url: serverUrl + '/video/showAll?currentPage=' + currentPage,
       method: 'POST',
-      success: function(res) {
+      success: function (res) {
         // 隐藏进度条
         wx.hideLoading();
 
@@ -49,10 +55,10 @@ Page({
         // 加载新数据
 
         // 新视频列表数据
-        let videoList = res.data.data.rows;
+        const videoList = res.data.data.rows;
         // 原视频列表数据
-        let oldVideoList = that.data.videoList;
-         
+        const oldVideoList = that.data.videoList;
+
         that.setData({
           videoList: oldVideoList.concat(videoList),
           currentPage: currentPage,
@@ -61,5 +67,26 @@ Page({
         })
       }
     })
+  },
+
+  // 滑动到页面底部
+  onReachBottom: function() {
+    const that = this;
+    // 当前页数
+    let currentPage = that.data.currentPage;
+    // 视频总页数
+    const totalPage = that.data.totalPage;
+
+    // 判断当前页数和总页数是否相等，如果相等则无需刷新
+    if (currentPage === totalPage) {
+      wx.showToast({
+        title: '已经没有视频啦~~',
+        icon: 'none'
+      })
+      return;
+    }
+
+    // 获取所有视频列表分页信息
+    that.getAllVideoList(currentPage + 1);
   }
 })
