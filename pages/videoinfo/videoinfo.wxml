@@ -56,3 +56,40 @@
   </video>
 
 </view>
+
+<view>
+
+  <view class="saySthView">
+  <input name="commentContent" class="saySth" placeholder="{{placeholder}}" confirm-type="send" bindconfirm="saveComment" focus='{{commentFocus}}' value='{{contentValue}}'
+  data-replyFatherCommentId='{{replyFatherCommentId}}'
+  data-replyToUserId='{{replyToUserId}}'
+  />
+  </view>
+
+  <block wx:for="{{commentsList}}">
+    <view class='comments-all' bindtap='replyFocus' 
+    data-fatherCommentId='{{item.id}}'  
+    data-toUserId='{{item.fromUserId}}' 
+    data-toNickname='{{item.nickname}}' 
+    >
+        <view class='container-comments'>
+            <image class="face-comments" src='{{serverUrl}}{{item.faceImage}}' ></image>
+            <view class='nickname-comments'>
+                <label class='nickname-lbl'>@{{item.nickname}}</label>
+                于 
+                <label class='date-lbl'>{{item.timeAgoStr}}</label>
+                <!-- 留言： -->
+                <block wx:if="{{item.toNickname != null}}">
+                  回复
+                  <label class='nickname-lbl'>@{{item.toNickname}}</label>
+                </block>
+                <block wx:else>
+                  留言：
+                </block>
+            </view>
+        </view>
+        <view class='comments-content'>{{item.comment}}</view>
+    </view>
+  </block> 
+
+</view>
