@@ -7,8 +7,11 @@ Page({
     totalPage: 1, // 总页数
     currentPage: 1, // 当前页数
     videoList: [], // 视频列表
+
     screenWidth: 350, // 屏幕宽度
-    serverUrl: '' // 服务器地址
+    serverUrl: '', // 服务器地址
+
+    searchContent: '' // 搜索的内容
   },
   // 页面加载
   onLoad: function (params) {
@@ -20,13 +23,25 @@ Page({
       screenWidth: screenWidth,
     });
 
+    // 搜索内容
+    const searchContent = params.search;
+    // 是否保存记录
+    let isSaveRecond = params.isSaveRecond;
+    if (isSaveRecond == null || isSaveRecond == '' || isSaveRecond == undefined) {
+      isSaveRecond = 0;
+    }
+
+    that.setData({
+      searchContent: searchContent
+    })
+
     // 获取当前页数
     const currentPage = that.data.currentPage;
     // 获取所有视频列表分页信息
-    that.getAllVideoList(currentPage);
+    that.getAllVideoList(currentPage, isSaveRecond);
   },
   // 获取所有视频列表分页信息
-  getAllVideoList: function (currentPage) {
+  getAllVideoList: function (currentPage, isSaveRecond) {
     var that = this;
     const serverUrl = app.serverUrl;
 
@@ -35,10 +50,16 @@ Page({
       title: '加载中…'
     })
 
+    // 获取搜索内容
+    const searchContent = that.data.searchContent;
+
     // 请求视频分页数据
     wx.request({
-      url: serverUrl + '/video/showAll?currentPage=' + currentPage,
+      url: serverUrl + '/video/showAll?currentPage=' + currentPage + '&isSaveRecond=' + isSaveRecond,
       method: 'POST',
+      data: {
+        videoDesc: searchContent
+      },
       success: function (res) {
         // 隐藏进度条
         wx.hideLoading();
