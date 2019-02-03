@@ -60,12 +60,14 @@ Page({
       const tempCoverUrl = that.data.videoParams.tempCoverUrl; // 视频封面图
 
       const serverUrl = app.serverUrl;
+      // 获取全局用户信息
+      const userInfo = app.getGlobalUserInfo();
 
       // 上传短视频
       wx.uploadFile({
         url: serverUrl + '/video/upload',
         formData: {
-          userId: app.userInfo.id,
+          userId: userInfo.id,
           bgmId: bgmId,
           desc: desc,
           videoSeconds: duration,

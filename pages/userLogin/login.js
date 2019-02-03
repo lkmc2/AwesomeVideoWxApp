@@ -66,25 +66,15 @@ Page({
             });
 
             // 存储用户信息到本地
-            app.userInfo = res.data.data;
+            // app.userInfo = res.data.data;
+
+            // 修改原有的全局对象为本地缓存
+            app.setGlobalUserInfo(res.data.data);
 
             // 跳转到我的页面
             wx.redirectTo({
               url: '../mine/mine',
             })
-            // app.setGlobalUserInfo(res.data.data);
-
-            // TODO 页面跳转
-            // let redirectUrl = that.redirectUrl;
-            // if (redirectUrl) {
-            //   wx.redirectTo({
-            //     url: redirectUrl,
-            //   })
-            // } else {
-            //   wx.redirectTo({
-            //     url: '../mine/mine',
-            //   })
-            // }
           } else if (res.data.status == 500) {
             // 登陆失败，弹出失败提示框
             wx.showToast({

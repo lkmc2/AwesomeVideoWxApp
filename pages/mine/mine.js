@@ -13,8 +13,11 @@ Page({
   // 页面加载时加载用户数据到本地
   onLoad: function() {
     const that = this;
-    const user = app.userInfo;
     const serverUrl = app.serverUrl;
+    // const user = app.userInfo;
+
+    // 获取全局用户信息
+    const userInfo = app.getGlobalUserInfo();
 
     wx.showLoading({
       title: '请等待...',
@@ -22,7 +25,7 @@ Page({
 
     // 调用后端
     wx.request({
-      url: serverUrl + '/user/query?userId=' + user.id,
+      url: serverUrl + '/user/query?userId=' + userInfo.id,
       method: "POST",
       header: {
         'content-type': 'application/json' // 默认值
@@ -52,13 +55,16 @@ Page({
   },
   // 退出登陆
   logout: function() {
-    const user = app.userInfo;
+    // const user = app.userInfo;
     const serverUrl = app.serverUrl;
+
+    // 获取全局用户信息
+    const userInfo = app.getGlobalUserInfo();
 
     // 调用后端
     wx.request({
       // 退出登陆
-      url: serverUrl + '/logout?userId=' + user.id,
+      url: serverUrl + '/logout?userId=' + userInfo.id,
       method: "POST",
       header: {
         'content-type': 'application/json' // 默认值
@@ -74,8 +80,10 @@ Page({
             duration: 2000
           });
 
-          // 清空用户信息
-          app.userInfo = null;
+          // 清空用户信息，移除本地用户信息缓存
+          // app.userInfo = null;
+          wx.removeStorageSync('userInfo');
+
           // 跳转到登陆页面
           wx.navigateTo({
             url: '../userLogin/login'
@@ -104,10 +112,12 @@ Page({
         })
 
         const serverUrl = app.serverUrl;
+        // 获取全局用户信息
+        const userInfo = app.getGlobalUserInfo();
 
         // 上传头像
         wx.uploadFile({
-          url: serverUrl + '/user/uploadFace?userId=' + app.userInfo.id,
+          url: serverUrl + '/user/uploadFace?userId=' + userInfo.id,
           filePath: tempFilePaths[0],
           name: 'file',
           success(res) {
