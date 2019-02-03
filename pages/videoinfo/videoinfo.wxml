@@ -1,0 +1,13 @@
+<view style='width:100%;height:100%;'>
+
+  <video src="http://localhost:8080/180930DRXM99CKKP/video/aeaf247b-f45d-4f1e-b8ad-0e6e4e2754cd.mp4"
+muted="{{true}}"
+controls="{{false}}"
+autoplay="{{true}}"
+loop="{{true}}"
+enable-progress-gesture="{{false}}"
+style='width:100%;height:100%;'
+objectFit="{{cover}}"
+></video>
+
+</view>

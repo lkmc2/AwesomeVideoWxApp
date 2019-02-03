@@ -1,5 +1,6 @@
 {
   "pages":[
+    "pages/videoinfo/videoinfo",
     "pages/index/index",
     "pages/userLogin/login",
     "pages/mine/mine",
