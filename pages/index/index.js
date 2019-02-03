@@ -42,6 +42,10 @@ Page({
       success: function (res) {
         // 隐藏进度条
         wx.hideLoading();
+        // 隐藏导航条加载动画
+        wx.hideNavigationBarLoading();
+        // 停止页面下拉刷新
+        wx.stopPullDownRefresh();
 
         console.log(res)
 
@@ -68,8 +72,14 @@ Page({
       }
     })
   },
-
-  // 滑动到页面底部
+  // 滑动到页面顶部（下拉刷新）
+  onPullDownRefresh: function() {
+    // 在当前页面显示导航条加载动画
+    wx.showNavigationBarLoading();
+    // 请求第一页的数据
+    this.getAllVideoList(1);
+  },
+  // 滑动到页面底部（上拉刷新）
   onReachBottom: function() {
     const that = this;
     // 当前页数
