@@ -20,7 +20,7 @@
     <!-- 搜索提示部分 -->
     <view class="wxSearchMindKey">
       <view class="wxSearchMindKeyList">
-        <block wx:for="{{wxSearchData.tipKeys}}">
+        <block wx:for="{{wxSearchData.tipKeys}}" wx:key="key">
           <view class="wxSearchMindKeyItem" bindtap="wxSearchKeyTap" data-key="{{item}}">{{item}}</view>
         </block>
       </view>
@@ -33,7 +33,7 @@
         <icon type="clear" bindtap="wxSearchDeleteAll" size="18" />
       </view>
       <view class="wxSearchKeyList">
-        <block wx:for="{{wxSearchData.his}}">
+        <block wx:for="{{wxSearchData.his}}" wx:key="key">
           <view class="wxSearchKeyItem" bindtap="wxSearchKeyTap" data-key="{{item}}">{{item}}</view>
         </block>
       </view>
@@ -42,7 +42,7 @@
     <view class="wxSearchKey" style="display:{{wxSearchData.value.length>0 ? 'none':'block'}}">
       <text wx:if="{{wxSearchData.hotKeys[0]}}" class="wxSearchTitle">搜索热点</text>
       <view class="wxSearchKeyList">
-        <block wx:for="{{wxSearchData.hotKeys}}">
+        <block wx:for="{{wxSearchData.hotKeys}}" wx:key="key">
           <view class="wxSearchKeyItem" bindtap="wxSearchKeyTap" data-key="{{item}}">{{item}}</view>
         </block>
       </view>
