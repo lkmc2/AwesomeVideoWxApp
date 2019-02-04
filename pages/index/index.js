@@ -26,7 +26,7 @@ Page({
     // 搜索内容
     const searchContent = params.search;
     // 是否保存记录
-    let isSaveRecord = params.isSaveRecond;
+    let isSaveRecord = params.isSaveRecord;
     if (isSaveRecord === null || isSaveRecord === '' || isSaveRecord === undefined) {
       isSaveRecord = 0;
     }

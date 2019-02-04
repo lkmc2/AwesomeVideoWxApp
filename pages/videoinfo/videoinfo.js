@@ -54,6 +54,9 @@ Page({
       loginUserId = userInfo.id;
     }
 
+    // ------------------对登陆用户进行硬编码-------------------
+    loginUserId = '180930DRXM99CKKP';
+
     // 调用后端，查询发布者
     wx.request({
       url: serverUrl + '/user/queryPublisher?loginUserId=' + loginUserId + '&videoId=' + videoInfo.id + '&publishUserId=' + videoInfo.userId,
