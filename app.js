@@ -8,6 +8,6 @@ App({
   },
   // 获取全局用户信息
   getGlobalUserInfo: function () {
-    return wx.getStorageInfoSync('userInfo');
+    return wx.getStorageSync('userInfo');
   }
 });
