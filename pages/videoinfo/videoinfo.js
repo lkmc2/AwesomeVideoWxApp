@@ -1,12 +1,12 @@
 // 视频信息页
-const app = getApp()
+const app = getApp();
 
 Page({
   data: {
     cover: "cover", // 对视频进行拉伸
     videoId: "", // 视频id
     src: "", // 视频播放地址
-    videoInfo: { }, // 视频信息
+    videoInfo: {}, // 视频信息
 
     userLikeVideo: false, // 用户视频喜欢该视频
 
@@ -17,7 +17,7 @@ Page({
     placeholder: '说点什么…' // 输入框提示信息
   },
   // 视频播放组件
-  videoCtx: { },
+  videoCtx: {},
   // 页面加载
   onLoad: function (params) {
     const that = this;
@@ -42,7 +42,7 @@ Page({
       src: app.serverUrl + videoInfo.videoPath,
       videoInfo: videoInfo,
       cover: cover
-    })
+    });
 
     const serverUrl = app.serverUrl;
     // 获取全局用户信息
@@ -71,10 +71,10 @@ Page({
     })
   },
   // 展示搜索页面
-  showSearch: function() {
+  showSearch: function () {
     // 跳转到搜索视频页面
     wx.navigateTo({
       url: '../searchVideo/searchVideo',
     })
   }
-})
+});

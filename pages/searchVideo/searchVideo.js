@@ -1,11 +1,10 @@
 // 视频搜索页
 const WxSearch = require('../../wxSearchView/wxSearchView.js');
 
-const app = getApp()
+const app = getApp();
 
 Page({
-  data: {
-  },
+  data: {},
   // 页面加载
   onLoad: function (params) {
     const that = this;
@@ -15,18 +14,18 @@ Page({
     wx.request({
       url: serverUrl + '/video/hot',
       method: "POST",
-      success: function(res) {
+      success: function (res) {
         console.log(res);
         // 获取热搜词列表
         const hotList = res.data.data;
 
         // 初始化搜索框
         WxSearch.init(
-          that,  // 本页面一个引用
-          hotList, // 热点搜索推荐，[]表示不使用
-          hotList, // 搜索匹配，[]表示不使用
-          that.mySearchFunction, // 提供一个搜索回调函数
-          that.myGobackFunction //提供一个返回回调函数
+            that,  // 本页面一个引用
+            hotList, // 热点搜索推荐，[]表示不使用
+            hotList, // 搜索匹配，[]表示不使用
+            that.mySearchFunction, // 提供一个搜索回调函数
+            that.myGobackFunction //提供一个返回回调函数
         );
       }
     })
@@ -55,4 +54,4 @@ Page({
       url: '../index/index?searchValue=返回'
     })
   }
-})
+});

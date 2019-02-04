@@ -1,5 +1,5 @@
 // 首页
-const app = getApp()
+const app = getApp();
 
 Page({
   data: {
@@ -27,13 +27,13 @@ Page({
     const searchContent = params.search;
     // 是否保存记录
     let isSaveRecond = params.isSaveRecond;
-    if (isSaveRecond == null || isSaveRecond == '' || isSaveRecond == undefined) {
+    if (isSaveRecond === null || isSaveRecond === '' || isSaveRecond === undefined) {
       isSaveRecond = 0;
     }
 
     that.setData({
       searchContent: searchContent
-    })
+    });
 
     // 获取当前页数
     const currentPage = that.data.currentPage;
@@ -48,7 +48,7 @@ Page({
     // 显示进度条
     wx.showLoading({
       title: '加载中…'
-    })
+    });
 
     // 获取搜索内容
     const searchContent = that.data.searchContent;
@@ -68,7 +68,7 @@ Page({
         // 停止页面下拉刷新
         wx.stopPullDownRefresh();
 
-        console.log(res)
+        console.log(res);
 
         // 判断当前页currentPage是否是第一页，如果是第一页，那么设置videoList为空
         if (currentPage === 1) {
@@ -94,14 +94,14 @@ Page({
     })
   },
   // 滑动到页面顶部（下拉刷新）
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function () {
     // 在当前页面显示导航条加载动画
     wx.showNavigationBarLoading();
     // 请求第一页的数据
     this.getAllVideoList(1);
   },
   // 滑动到页面底部（上拉刷新）
-  onReachBottom: function() {
+  onReachBottom: function () {
     const that = this;
     // 当前页数
     let currentPage = that.data.currentPage;
@@ -113,11 +113,11 @@ Page({
       wx.showToast({
         title: '已经没有视频啦~~',
         icon: 'none'
-      })
+      });
       return;
     }
 
     // 获取所有视频列表分页信息
     that.getAllVideoList(currentPage + 1);
   }
-})
+});

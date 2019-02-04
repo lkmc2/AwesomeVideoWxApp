@@ -1,5 +1,6 @@
+// 我的页面
 // 获取应用实例
-const app = getApp()
+const app = getApp();
 
 Page({
   data: {
@@ -11,7 +12,7 @@ Page({
     receiveLikeCounts: 0
   },
   // 页面加载时加载用户数据到本地
-  onLoad: function() {
+  onLoad: function () {
     const that = this;
     const serverUrl = app.serverUrl;
     // const user = app.userInfo;
@@ -32,8 +33,9 @@ Page({
       },
       success: function (res) {
         console.log(res.data);
+
         wx.hideLoading();
-        if (res.data.status == 200) {
+        if (res.data.status === 200) {
           const userInfo = res.data.data;
 
 
@@ -54,7 +56,7 @@ Page({
     })
   },
   // 退出登陆
-  logout: function() {
+  logout: function () {
     // const user = app.userInfo;
     const serverUrl = app.serverUrl;
 
@@ -72,7 +74,7 @@ Page({
       success: function (res) {
         console.log(res.data);
         wx.hideLoading();
-        if (res.data.status == 200) {
+        if (res.data.status === 200) {
           // 退出登录成功跳转 
           wx.showToast({
             title: '注销成功',
@@ -93,7 +95,7 @@ Page({
     })
   },
   // 更换头像
-  changeFace: function() {
+  changeFace: function () {
     const that = this;
 
     // 选择图片
@@ -103,13 +105,13 @@ Page({
       sourceType: ['album'], // 从相册中选取
       success(res) {
         // 上传到微信服务器的临时图片数组
-        const tempFilePaths = res.tempFilePaths
+        const tempFilePaths = res.tempFilePaths;
         // console.log(tempFilePaths)
 
         // 弹出进度条
         wx.showLoading({
           title: '上传中……',
-        })
+        });
 
         const serverUrl = app.serverUrl;
         // 获取全局用户信息
@@ -126,11 +128,11 @@ Page({
             // 隐藏进度条
             wx.hideLoading();
 
-            if (data.status == 200) {
+            if (data.status === 200) {
               wx.showToast({
                 title: '上传成功！',
                 icon: 'success'
-              })
+              });
 
               const imageUrl = data.data;
               // 设置头像到页面
@@ -148,7 +150,7 @@ Page({
     })
   },
   // 上传视频
-  uploadVideo: function() {
+  uploadVideo: function () {
     const that = this;
 
     // 选择视频
@@ -157,7 +159,7 @@ Page({
       maxDuration: 11, // 视频最长时间
       camera: 'back', // 调用后置摄像头
       success(res) {
-        console.log(res)
+        console.log(res);
 
         const duration = res.duration; // 播放时长
         const tempHeight = res.height; // 视频宽
@@ -181,13 +183,13 @@ Page({
           // 打开选择bgm背景乐的页面，并携带参数给下一个页面
           wx.navigateTo({
             url: '../chooseBgm/chooseBgm?duration=' + duration
-              + '&tempHeight=' + tempHeight
-              + '&tempWidth=' + tempWidth
-              + '&tempVideoUrl=' + tempVideoUrl
-              + '&tempCoverUrl=' + tempCoverUrl
+                + '&tempHeight=' + tempHeight
+                + '&tempWidth=' + tempWidth
+                + '&tempVideoUrl=' + tempVideoUrl
+                + '&tempCoverUrl=' + tempCoverUrl
           })
         }
       }
     })
   }
-})
+});

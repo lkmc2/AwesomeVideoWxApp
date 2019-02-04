@@ -1,4 +1,5 @@
-const app = getApp()
+// 登陆页
+const app = getApp();
 
 Page({
   data: {},
@@ -26,7 +27,7 @@ Page({
     let password = formObject.password;
 
     // 简单验证
-    if (username.length == 0 || password.length == 0) {
+    if (username.length === 0 || password.length === 0) {
       wx.showToast({
         title: '用户名或密码不能为空',
         icon: 'none',
@@ -57,7 +58,7 @@ Page({
           // 隐藏进度条
           wx.hideLoading();
 
-          if (res.data.status == 200) {
+          if (res.data.status === 200) {
             // 登陆成功跳转
             wx.showToast({
               title: '登陆成功',
@@ -75,14 +76,14 @@ Page({
             wx.redirectTo({
               url: '../mine/mine',
             })
-          } else if (res.data.status == 500) {
+          } else if (res.data.status === 500) {
             // 登陆失败，弹出失败提示框
             wx.showToast({
               title: res.data.msg,
               icon: 'none',
               duration: 3000
             })
-          } 
+          }
         }
       })
     }
@@ -94,4 +95,4 @@ Page({
       url: '../userRegist/regist',
     })
   }
-})
+});
