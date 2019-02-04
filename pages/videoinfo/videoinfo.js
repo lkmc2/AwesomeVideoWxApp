@@ -50,6 +50,10 @@ Page({
     // 登陆用户id
     let loginUserId = "";
 
+    if (userInfo) {
+      loginUserId = userInfo.id;
+    }
+
     // 调用后端，查询发布者
     wx.request({
       url: serverUrl + '/user/queryPublisher?loginUserId=' + loginUserId + '&videoId=' + videoInfo.id + '&publishUserId=' + videoInfo.userId,
@@ -68,7 +72,7 @@ Page({
           userLikeVideo: userLikeVideo
         })
       }
-    })
+    });
   },
   // 展示搜索页面
   showSearch: function () {

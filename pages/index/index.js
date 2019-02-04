@@ -15,10 +15,10 @@ Page({
   },
   // 页面加载
   onLoad: function (params) {
-    var that = this;
+    const that = this;
 
     // 获取系统中的屏幕宽度
-    var screenWidth = wx.getSystemInfoSync().screenWidth;
+    const screenWidth = wx.getSystemInfoSync().screenWidth;
     that.setData({
       screenWidth: screenWidth,
     });
@@ -26,9 +26,9 @@ Page({
     // 搜索内容
     const searchContent = params.search;
     // 是否保存记录
-    let isSaveRecond = params.isSaveRecond;
-    if (isSaveRecond === null || isSaveRecond === '' || isSaveRecond === undefined) {
-      isSaveRecond = 0;
+    let isSaveRecord = params.isSaveRecond;
+    if (isSaveRecord === null || isSaveRecord === '' || isSaveRecord === undefined) {
+      isSaveRecord = 0;
     }
 
     that.setData({
@@ -38,7 +38,7 @@ Page({
     // 获取当前页数
     const currentPage = that.data.currentPage;
     // 获取所有视频列表分页信息
-    that.getAllVideoList(currentPage, isSaveRecond);
+    that.getAllVideoList(currentPage, isSaveRecord);
   },
   // 获取所有视频列表分页信息
   getAllVideoList: function (currentPage, isSaveRecond) {
@@ -98,7 +98,7 @@ Page({
     // 在当前页面显示导航条加载动画
     wx.showNavigationBarLoading();
     // 请求第一页的数据
-    this.getAllVideoList(1);
+    this.getAllVideoList(1, 0);
   },
   // 滑动到页面底部（上拉刷新）
   onReachBottom: function () {
@@ -118,6 +118,19 @@ Page({
     }
 
     // 获取所有视频列表分页信息
-    that.getAllVideoList(currentPage + 1);
+    that.getAllVideoList(currentPage + 1, 0);
+  },
+  // 展示视频详情信息
+  showVideoInfo: function (e) {
+    const that = this;
+
+    const videoList = that.data.videoList;
+    const arrIndex = e.target.dataset.arrindex;
+    // 将被点击的视频转换成字符串格式的json
+    const videoInfo = JSON.stringify(videoList[arrIndex]);
+
+    wx.redirectTo({
+      url: '../videoinfo/videoinfo?videoInfo=' + videoInfo
+    })
   }
 });
