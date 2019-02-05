@@ -92,5 +92,29 @@ Page({
         wx.navigateTo({
             url: '../searchVideo/searchVideo',
         })
+    },
+    // 展示视频发布者信息
+    showPublisher: function () {
+        const that = this;
+
+        // 获取全局用户信息
+        const userInfo = app.getGlobalUserInfo();
+
+        // 视频信息
+        const videoInfo = that.data.videoInfo;
+        // 真实发布地址
+        const realUrl = '../mine/mine#publisherId@' + videoInfo.userId;
+
+        if (!userInfo) {
+            // 没有全局用户信息时跳转到登录页
+            wx.navigateTo({
+                url: '../userLogin/login?redirectUrl=' + realUrl
+            });
+        } else {
+            // 已登录时，跳转到我的页面，展示发布者信息
+            wx.navigateTo({
+                url: '../mine/mine?publisherId=' + videoInfo.userId
+            });
+        }
     }
 });
