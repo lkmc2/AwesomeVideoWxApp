@@ -76,12 +76,14 @@ Page({
       },
       success(res) {
         wx.showToast({
-          title: res.data.msg,
+          title: res.data.data,
           duration: 2000,
           icon: "none",
           success(res) {
-            // 返回上一页
-            wx.navigateBack();
+            setTimeout(function () {
+              // 返回上一页
+              wx.navigateBack();
+            }, 2000);
           }
         })
       }
