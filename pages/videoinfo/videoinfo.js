@@ -141,5 +141,28 @@ Page({
             // 已登录时，进行视频上传
             videoUtil.uploadVideo();
         }
+    },
+    // 跳转到首页
+    showIndex: function () {
+        wx.redirectTo({
+            url: '../index/index'
+        })
+    },
+    // 显示我的页面
+    showMine: function () {
+        // 获取全局用户信息
+        const userInfo = app.getGlobalUserInfo();
+
+        if (!userInfo) {
+            // 未登录时跳转到登录页
+            wx.navigateTo({
+                url: '../userLogin/login'
+            });
+        } else {
+            // 已登录时，跳转到我的页面
+            wx.navigateTo({
+                url: '../mine/mine'
+            })
+        }
     }
 });
