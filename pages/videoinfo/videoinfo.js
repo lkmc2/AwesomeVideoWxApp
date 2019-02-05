@@ -215,5 +215,78 @@ Page({
                 }
             })
         }
+    },
+    // 分享视频
+    shareMe: function () {
+        const that = this;
+
+        // 获取全局用户信息
+        const userInfo = app.getGlobalUserInfo();
+
+        // 展示选项列表
+        wx.showActionSheet({
+            itemList: ['下载到本地', '举报用户', '分享到朋友圈', '分享到QQ空间', '分享到微博'],
+            success(res) {
+                console.log(res.tapIndex);
+
+                // 用户点赞选项的下标
+                const tapIndex = res.tapIndex;
+
+                if (tapIndex === 0) {
+                    // 下载
+                    wx.showLoading({
+                        title: '下载中…'
+                    });
+
+                    // 下载文件
+                    wx.downloadFile({
+                        url: app.serverUrl + that.data.videoInfo.videoPath,
+                        success(res) {
+                            // 只要服务器有数据响应，就会把响应内容写入文件，并进行success回调
+                            if (res.statusCode === 200) {
+                                console.log(res.tempFilePath);
+
+                                // 保存视频到相册
+                                wx.saveVideoToPhotosAlbum({
+                                    filePath: res.tempFilePath,
+                                    success(errMsg) {
+                                        console.log(errMsg);
+                                        // 隐藏进度加载条
+                                        wx.hideLoading();
+                                    }
+                                })
+                            }
+                        }
+                    })
+                } else if (tapIndex === 1) {
+                    // 举报
+                    const videoInfo = JSON.stringify(that.data.videoInfo);
+                    const realUrl = '../videoinfo/videoinfo#videoInfo@' + videoInfo;
+
+                    if (!userInfo) {
+                        // 未登录时跳转到登录页
+                        wx.navigateTo({
+                            url: '../userLogin/login?redirectUrl=' + realUrl
+                        });
+                    } else {
+                        // 已登录时，传递参数，并跳转到举报页面
+
+                        // 视频发布者id
+                        const publishUserId = that.data.videoInfo.userId;
+                        // 视频id
+                        const videoId = that.data.videoInfo.id;
+
+                        wx.navigateTo({
+                            url: `../report/report?videoId=${videoId}&publishUserId=${publishUserId}`
+                        })
+                    }
+                } else {
+                    // 其他选项
+                    wx.showToast({
+                        title: '官方暂未开放…'
+                    })
+                }
+            }
+        })
     }
 });
