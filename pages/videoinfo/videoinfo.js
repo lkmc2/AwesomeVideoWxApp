@@ -164,5 +164,56 @@ Page({
                 url: '../mine/mine'
             })
         }
+    },
+    // 是否给该视频点赞
+    likeVideoOrNot: function () {
+        const that = this;
+
+        // 视频信息
+        const videoInfo = that.data.videoInfo;
+        // 获取全局用户信息
+        const userInfo = app.getGlobalUserInfo();
+
+        if (!userInfo) {
+            // 未登录时跳转到登录页
+            wx.navigateTo({
+                url: '../userLogin/login'
+            });
+        } else {
+            // 已登录时，判断用户是否点赞并进行数据更新
+           const userLikeVideo = that.data.userLikeVideo;
+
+           // 将请求的地址
+           let url = `/video/userLike?userId=${userInfo.id}&videoId=${videoInfo.id}&videoCreatorId=${videoInfo.userId}`;
+            if (userLikeVideo) {
+                url = `/video/userUnLike?userId=${userInfo.id}&videoId=${videoInfo.id}&videoCreatorId=${videoInfo.userId}`;
+            }
+
+            const serverUrl = app.serverUrl;
+
+            // 展示提示框
+            wx.showLoading({
+                title: '请等待…'
+            });
+
+            // 网络请求
+            wx.request({
+                url: serverUrl + url,
+                method: "POST",
+                header: {
+                    'content-type': 'application/json', // 默认值
+                    'headerUserId': userInfo.id,
+                    'headerUserToken': userInfo.userToken
+                },
+                success(res) {
+                    // 隐藏提示框
+                    wx.hideLoading();
+
+                    that.setData({
+                        userLikeVideo: !userLikeVideo
+                    });
+                }
+            })
+        }
     }
 });
