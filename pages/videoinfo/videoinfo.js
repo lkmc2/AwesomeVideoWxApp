@@ -1,6 +1,9 @@
 // 视频信息页
 const app = getApp();
 
+// 视频工具类
+const videoUtil = require('../../utils/videoUtils.js');
+
 Page({
     data: {
         cover: "cover", // 对视频进行拉伸
@@ -115,6 +118,28 @@ Page({
             wx.navigateTo({
                 url: '../mine/mine?publisherId=' + videoInfo.userId
             });
+        }
+    },
+    // 上传视频
+    upload: function () {
+        const that = this;
+
+        // 获取全局用户信息
+        const userInfo = app.getGlobalUserInfo();
+
+        // 将视频信息变成字符串
+        const videoInfo = JSON.stringify(that.data.videoInfo);
+        // 真实视频信息地址
+        const realUrl = '../videoinfo/videoinfo/#videoInfo@' + videoInfo;
+
+        if (!userInfo) {
+            // 未登录时跳转到登录页
+            wx.navigateTo({
+                url: '../userLogin/login/redirectUrl=' + realUrl
+            });
+        } else {
+            // 已登录时，进行视频上传
+            videoUtil.uploadVideo();
         }
     }
 });

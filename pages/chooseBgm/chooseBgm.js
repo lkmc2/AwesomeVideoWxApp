@@ -58,7 +58,6 @@ Page({
     const tempHeight = that.data.videoParams.tempHeight; // 视频宽
     const tempWidth = that.data.videoParams.tempWidth; // 视频高
     const tempVideoUrl = that.data.videoParams.tempVideoUrl; // 视频临时地址
-    const tempCoverUrl = that.data.videoParams.tempCoverUrl; // 视频封面图
 
     const serverUrl = app.serverUrl;
     // 获取全局用户信息
