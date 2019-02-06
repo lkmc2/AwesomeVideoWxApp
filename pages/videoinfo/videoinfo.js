@@ -288,5 +288,65 @@ Page({
                 }
             }
         })
+    },
+    // 评论按钮点击事件
+    leaveComment: function () {
+        // 设置让评论输入框获取焦点
+        this.setData({
+            commentFocus: true
+        });
+    },
+    // 保存用户评论
+    saveComment: function (e) {
+        const that = this;
+
+        // 获取用户输入的评论
+        const content = e.detail.value;
+
+        // 获取评论恢复的fatherCommentId（父评论的id）和toUserId（被评论者的id）
+        const fatherCommentId = e.currentTarget.dataset.replyfathercommentid;
+        const toUserId = e.currentTarget.dataset.replytouserid;
+
+        // 获取全局用户信息
+        const userInfo = app.getGlobalUserInfo();
+        const videoInfo = JSON.stringify(that.data.videoInfo);
+        const realUrl = '../videoinfo/videoinfo#videoInfo@' + videoInfo;
+
+        if (!userInfo) {
+            // 未登录时跳转到登录页
+            wx.navigateTo({
+                url: '../userLogin/login?redirectUrl=' + realUrl
+            });
+        } else {
+            // 已登录时，保存评论内容
+            wx.showLoading({
+                title: '请稍候…'
+            });
+
+            wx.request({
+                url: `${app.serverUrl}/video/saveComment?fatherCommentId=${fatherCommentId}&toUserId=${toUserId}`,
+                method: "POST",
+                header: {
+                    'content-type': 'application/json', // 默认值
+                    'headerUserId': userInfo.id,
+                    'headerUserToken': userInfo.userToken
+                },
+                data: {
+                    fromUserId: userInfo.id, // 当前用户id
+                    videoId: that.data.videoInfo.id, // 视频id
+                    comment: content // 评论内容
+                },
+                success(res) {
+                    console.log(res.data);
+                    wx.hideLoading(); // 隐藏进度加载框
+
+                    // 清空输入框的内容和评论列表
+                    that.setData({
+                        contentValue: '',
+                        commentsList: ''
+                    })
+                }
+            })
+        }
     }
 });
