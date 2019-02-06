@@ -344,9 +344,56 @@ Page({
                     that.setData({
                         contentValue: '',
                         commentsList: ''
-                    })
+                    });
+
+                    // 请求第一页的评论列表
+                    that.getCommentsList(1);
                 }
             })
         }
+    },
+    // 获取评论列表
+    getCommentsList: function (page) {
+        const that = this;
+
+        // 视频id
+        const videoId = that.data.videoInfo.id;
+
+        wx.request({
+            url: `${app.serverUrl}/video/getVideoComments?videoId=${videoId}&page=${page}&pageSize=5`,
+            method: "POST",
+            success(res) {
+                console.log(res);
+
+                // 获取请求的评论列表
+                const commentsList = res.data.data.rows;
+                const oldCommentsList = res.data.commentsList;
+
+                // 合并评论列表
+                that.setData({
+                    commentsList: oldCommentsList.concat(commentsList),
+                    commentsPage: page,
+                    commentsTotalPage: res.data.data.total
+                })
+            }
+        })
+    },
+    // 滑动到页面底部
+    onReachBottom: function () {
+        const that = this;
+
+        // 当前页数
+        const currentPage = that.data.commentsPage;
+        // 总页数
+        const totalPage = that.data.commentsTotalPage;
+
+        // 到达最后一页
+        if (currentPage === totalPage) {
+            return;
+        }
+
+        // 请求下一页的数据
+        const page = currentPage + 1;
+        that.getCommentsList(page);
     }
 });
