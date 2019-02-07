@@ -23,15 +23,19 @@ Page({
     });
 
     const serverUrl = app.serverUrl;
+    // 获取全局用户信息
+    const userInfo = app.getGlobalUserInfo();
 
     // 调用后端
     wx.request({
       url: serverUrl + '/bgm/list',
       method: "POST",
       header: {
-        'content-type': 'application/json' // 默认值
+        'content-type': 'application/json', // 默认值
+        'headerUserId': userInfo.id,
+        'headerUserToken': userInfo.userToken
       },
-      success: function (res) {
+      success(res) {
         console.log(res.data);
         // 隐藏进度条
         wx.hideLoading();
@@ -41,7 +45,20 @@ Page({
           that.setData({
             bgmList: bgmList,
             serverUrl: serverUrl
-          })
+          });
+        } else {
+          wx.showToast({
+            title: res.data.msg,
+            duration: 2000,
+            icon: "none",
+            success(res) {
+              setTimeout(() => {
+                wx.redirectTo({
+                  url: '../userLogin/login'
+                })
+              })
+            }
+          });
         }
       }
     })
@@ -64,6 +81,11 @@ Page({
     const userInfo = app.getGlobalUserInfo();
 
     // 上传短视频
+    wx.showLoading({
+      title: '上传中...',
+    });
+
+    // 上传短视频
     wx.uploadFile({
       url: serverUrl + '/video/upload',
       formData: {
@@ -71,11 +93,16 @@ Page({
         bgmId: bgmId,
         desc: desc,
         videoSeconds: duration,
-        videoWidth: tempHeight,
-        videoHeight: tempWidth
+        videoWidth: tempWidth,
+        videoHeight: tempHeight
       },
       filePath: tempVideoUrl,
       name: 'file',
+      header: {
+        'content-type': 'application/json', // 默认值
+        'headerUserId': userInfo.id,
+        'headerUserToken': userInfo.userToken
+      },
       success(res) {
         const data = JSON.parse(res.data);
         console.log(res);

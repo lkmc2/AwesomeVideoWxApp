@@ -16,34 +16,48 @@ Page({
         duration: 3000
       })
     } else {
-      let serverUrl = app.serverUrl;
+      const serverUrl = app.serverUrl;
+
+      wx.showLoading({
+        title: '请等待...',
+      });
 
       // 请求后台注册接口
       wx.request({
         url: serverUrl + '/register',
         method: "POST",
         data: {
-          username,
-          password
+          username: username,
+          password: password
         },
         header: {
           'content-type': 'application/json'
         },
-        success: (res) => {
-          // console.log(res.data)
+        success(res) {
+          console.log(res.data)
           let status = res.data.status;
+
+          wx.hideLoading();
 
           if (status === 200) {
             wx.showToast({
               title: '用户注册成功',
               icon: 'none',
-              duration: 3000
+              duration: 3000,
+              success(res) {
+                setTimeout(() => {
+                  // app.userInfo = res.data.data;
+
+                  // 修改原有的全局对象为本地缓存
+                  app.setGlobalUserInfo(res.data.data);
+
+                  // 跳转到我的页面
+                  wx.redirectTo({
+                    url: '../mine/mine'
+                  })
+                }, 2000)
+              }
             });
-
-            // app.userInfo = res.data.data;
-
-            // 修改原有的全局对象为本地缓存
-            app.setGlobalUserInfo(res.data.data);
           } else if (status === 500) {
             wx.showToast({
               title: res.data.msg,
@@ -54,5 +68,11 @@ Page({
         }
       })
     }
+  },
+  // 跳转到登陆页
+  goLoginPage:function() {
+    wx.navigateTo({
+      url: '../userLogin/login',
+    })
   }
 });

@@ -292,6 +292,16 @@ Page({
             }
         })
     },
+    // 分享App消息
+    onShareAppMessage: function (res) {
+        var that = this;
+        var videoInfo = that.data.videoInfo;
+
+        return {
+            title: '短视频内容分析',
+            path: "pages/videoinfo/videoinfo?videoInfo=" + JSON.stringify(videoInfo)
+        }
+    },
     // 评论按钮点击事件
     leaveComment: function () {
         // 设置让评论输入框获取焦点

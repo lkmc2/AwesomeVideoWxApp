@@ -34,7 +34,7 @@ Page({
         duration: 3000
       })
     } else {
-      let serverUrl = app.serverUrl;
+      const serverUrl = app.serverUrl;
 
       // 显示进度条
       wx.showLoading({
@@ -46,13 +46,13 @@ Page({
         url: serverUrl + '/login',
         method: 'POST',
         data: {
-          username,
-          password
+          username: username,
+          password: password
         },
         header: {
           'content-type': 'application/json'
         },
-        success: (res) => {
+        success(res) {
           console.log(res.data);
 
           // 隐藏进度条
@@ -72,10 +72,18 @@ Page({
             // 修改原有的全局对象为本地缓存
             app.setGlobalUserInfo(res.data.data);
 
-            // 跳转到我的页面
-            wx.redirectTo({
-              url: '../mine/mine',
-            })
+            const redirectUrl = that.redirectUrl;
+            // 判断是否需要进行重定向
+            if (redirectUrl) {
+              wx.redirectTo({
+                url: redirectUrl
+              });
+            } else {
+              // 跳转到我的页面
+              wx.redirectTo({
+                url: '../mine/mine',
+              });
+            }
           } else if (res.data.status === 500) {
             // 登陆失败，弹出失败提示框
             wx.showToast({
@@ -90,7 +98,7 @@ Page({
   },
 
   // 跳转到注册页事件
-  goRegistPage: () => {
+  goRegistPage: function () {
     wx.redirectTo({
       url: '../userRegist/regist',
     })

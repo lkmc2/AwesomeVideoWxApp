@@ -51,7 +51,7 @@ Page({
       // 未选择举报原因时，进行提示
       wx.showToast({
         title: '请选择举报理由',
-        icon: 'icon'
+        icon: 'none'
       });
       return;
     }

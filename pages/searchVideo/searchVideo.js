@@ -42,7 +42,7 @@ Page({
     // do your job here
     // 示例：跳转
     wx.redirectTo({
-      url: '../index/index?searchValue=' + value
+      url: '../index/index?isSaveRecord=1&search=' + value
     })
   },
 
@@ -51,7 +51,7 @@ Page({
     // do your job here
     // 示例：返回
     wx.redirectTo({
-      url: '../index/index?searchValue=返回'
+      url: '../index/index'
     })
   }
 });

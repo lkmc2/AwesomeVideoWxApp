@@ -55,7 +55,7 @@ Page({
 
     // 请求视频分页数据
     wx.request({
-      url: serverUrl + '/video/showAll?currentPage=' + currentPage + '&isSaveRecond=' + isSaveRecond,
+      url: `${serverUrl}/video/showAll?currentPage=${currentPage}&isSaveRecond=${isSaveRecond}`,
       method: 'POST',
       data: {
         videoDesc: searchContent
@@ -74,7 +74,7 @@ Page({
         if (currentPage === 1) {
           that.setData({
             videoList: []
-          })
+          });
         }
 
         // 加载新数据
@@ -89,7 +89,7 @@ Page({
           currentPage: currentPage,
           totalPage: res.data.data.total,
           serverUrl: serverUrl
-        })
+        });
       }
     })
   },
