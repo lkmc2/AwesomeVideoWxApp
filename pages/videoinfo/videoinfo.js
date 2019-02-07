@@ -59,9 +59,9 @@ Page({
 
         // 调用后端，查询发布者
         wx.request({
-            url: serverUrl + '/user/queryPublisher?loginUserId=' + loginUserId + '&videoId=' + videoInfo.id + '&publishUserId=' + videoInfo.userId,
+            url: `${serverUrl}/user/queryPublisher?loginUserId=${loginUserId}&videoId=${videoInfo.id}&publishUserId=${videoInfo.userId}`,
             method: "POST",
-            success: function (res) {
+            success(res) {
                 console.log(res.data);
 
                 // 发布者
@@ -73,9 +73,12 @@ Page({
                     serverUrl: serverUrl,
                     publisher: publisher,
                     userLikeVideo: userLikeVideo
-                })
+                });
             }
         });
+
+        // 加载评论列表
+        that.getCommentsList(1);
     },
     // 页面展示时
     onShow: function () {
@@ -343,7 +346,7 @@ Page({
                     // 清空输入框的内容和评论列表
                     that.setData({
                         contentValue: '',
-                        commentsList: ''
+                        commentsList: []
                     });
 
                     // 请求第一页的评论列表
@@ -367,7 +370,7 @@ Page({
 
                 // 获取请求的评论列表
                 const commentsList = res.data.data.rows;
-                const oldCommentsList = res.data.commentsList;
+                const oldCommentsList = that.data.commentsList;
 
                 // 合并评论列表
                 that.setData({
