@@ -8,14 +8,14 @@ Page({
   onLoad: (params) => {
     let that = this;
     // 获取重定向url
-    let redirectUrl = params.redirectUrl;
-
-    if (redirectUrl) {
-      redirectUrl = redirectUrl.replace(/#/g, "?");
-      redirectUrl = redirectUrl.replace(/@/g, "=");
-
-      that.redirectUrl = redirectUrl;
-    }
+    // let redirectUrl = params.redirectUrl;
+    //
+    // if (redirectUrl) {
+    //   redirectUrl = redirectUrl.replace(/#/g, "?");
+    //   redirectUrl = redirectUrl.replace(/@/g, "=");
+    //
+    //   that.redirectUrl = redirectUrl;
+    // }
   },
 
   // 登陆事件
@@ -72,18 +72,23 @@ Page({
             // 修改原有的全局对象为本地缓存
             app.setGlobalUserInfo(res.data.data);
 
-            const redirectUrl = that.redirectUrl;
-            // 判断是否需要进行重定向
-            if (redirectUrl) {
-              wx.redirectTo({
-                url: redirectUrl
-              });
-            } else {
-              // 跳转到我的页面
-              wx.redirectTo({
-                url: '../mine/mine',
-              });
-            }
+            // 跳转到我的页面
+            wx.redirectTo({
+              url: '../mine/mine',
+            });
+
+            // const redirectUrl = that.redirectUrl;
+            // // 判断是否需要进行重定向
+            // if (redirectUrl) {
+            //   wx.redirectTo({
+            //     url: redirectUrl
+            //   });
+            // } else {
+            //   // 跳转到我的页面
+            //   wx.redirectTo({
+            //     url: '../mine/mine',
+            //   });
+            // }
           } else if (res.data.status === 500) {
             // 登陆失败，弹出失败提示框
             wx.showToast({

@@ -118,6 +118,56 @@ Page({
     // 获取我的视频列表
     that.getMyVideoList(1);
   },
+  // 关注该用户
+  followMe: function (e) {
+    const that = this;
+
+    // 获取全局用户信息
+    const userInfo = app.getGlobalUserInfo();
+    // 用户id
+    const userId = userInfo.id;
+    // 发布者id
+    const publisherId = that.data.publisherId;
+
+    // 关注类型（1 关注，0 取消关注）
+    const followType = e.currentTarget.dataset.followtype;
+
+    let url = '';
+    if (followType === '1') {
+      url = `/user/beYourFans?userId=${publisherId}&fanId=${userId}`;
+    } else {
+      url = `/user/dontBeYourFans?userId=${publisherId}&fanId=${userId}`;
+    }
+
+    // 显示进度条
+    wx.showLoading();
+
+    wx.request({
+      url: app.serverUrl + url,
+      method: "POST",
+      header: {
+        'content-type': 'application/json', // 默认值
+        'headerUserId': userInfo.id,
+        'headerUserToken': userInfo.userToken
+      },
+      success(res) {
+        // 隐藏进度条
+        wx.hideLoading();
+
+        if (followType === '1') {
+          that.setData({
+            isFollow: true,
+            fansCounts: ++that.data.fansCounts
+          });
+        } else {
+          that.setData({
+            isFollow: false,
+            fansCounts: --that.data.fansCounts
+          })
+        }
+      }
+    })
+  },
   // 退出登陆
   logout: function () {
     // const user = app.userInfo;
