@@ -7,21 +7,63 @@ const videoUtil = require('../../utils/videoUtils.js');
 
 Page({
   data: {
-    isMe: true,
-    faceUrl: "../resource/images/noneface.png",
-    nickname: '',
-    fansCounts: 0,
-    followCounts: 0,
-    receiveLikeCounts: 0
+    userId: '', // 用户id
+    faceUrl: "../resource/images/noneface.png", // 头像地址
+    isMe: true, // 是否是本人的详情页
+    isFollow: false, // 是否关注该用户
+    nickname: '', // 昵称
+
+
+    fansCounts: 0, // 粉丝数
+    followCounts: 0, // 关注数
+    receiveLikeCounts: 0, // 收到的点赞数
+
+    videoSelClass: "video-info",  // 视频选择器的样式类
+    isSelectedWord: "video-info-selected", // 是否选择了自己的作品列表
+    isSelectedLike: "", // 是否选择喜欢
+    isSelectedFollow: "", // 是否选择订阅
+
+    myVideoList: [], // 我的作品视频列表
+    myVideoPage: 1, // 我的作品视频当前页
+    myVideoTotal: 1, // 我的作品视频总页数
+
+    likeVideoList: [], // 喜欢的视频列表
+    likeVideoPage: 1, // 喜欢的视频当前页
+    likeVideoTotal: 1, // 喜欢的视频总页数
+
+    followVideoList: [], // 关注视频列表
+    followVideoPage: 1, // 关注视频当前页
+    followVideoTotal: 1, // 关注视频总页数
+
+    myWorkFlag: false, // 我的作品标志
+    myLikesFlag: true, // 我的喜欢标志
+    myFollowFlag: true // 我的关注标志
   },
   // 页面加载时加载用户数据到本地
-  onLoad: function () {
+  onLoad: function (params) {
     const that = this;
     const serverUrl = app.serverUrl;
-    // const user = app.userInfo;
 
     // 获取全局用户信息
     const userInfo = app.getGlobalUserInfo();
+    let userId = userInfo.id;
+
+    // 发布者id
+    const publisherId = params.publisherId;
+    if (publisherId) {
+      userId = publisherId;
+
+      // 设置发布者并非本人
+      that.setData({
+        isMe: false,
+        publisherId: publisherId,
+        serverUrl: serverUrl
+      })
+    }
+
+    that.setData({
+      userId: userId
+    });
 
     wx.showLoading({
       title: '请等待...',
@@ -29,34 +71,52 @@ Page({
 
     // 调用后端
     wx.request({
-      url: serverUrl + '/user/query?userId=' + userInfo.id,
+      url: `${serverUrl}/user/query?userId=${userId}&fanId=${userInfo.id}`,
       method: "POST",
       header: {
-        'content-type': 'application/json' // 默认值
+        'content-type': 'application/json', // 默认值
+        'headerUserId': userInfo.id,
+        'headerUserToken': userInfo.userToken
       },
-      success: function (res) {
+      success(res) {
         console.log(res.data);
 
         wx.hideLoading();
         if (res.data.status === 200) {
-          const userInfo = res.data.data;
-
+          const user = res.data.data;
 
           let faceUrl = "../resource/images/noneface.png";
-          if (userInfo.faceImage) {
-            faceUrl = serverUrl + userInfo.faceImage
+          if (user.faceImage) {
+            faceUrl = serverUrl + user.faceImage
           }
 
           that.setData({
             faceUrl: faceUrl,
-            nickname: userInfo.nickname,
-            fansCounts: userInfo.fansCounts,
-            followCounts: userInfo.followCounts,
-            receiveLikeCounts: userInfo.receiveLikeCounts
+            nickname: user.nickname,
+            fansCounts: user.fansCounts,
+            followCounts: user.followCounts,
+            receiveLikeCounts: user.receiveLikeCounts,
+            isFollow: user.follow
+          });
+        } else {
+          wx.showToast({
+            title: res.data.msg,
+            duration: 2000,
+            icon: "none",
+            success(res) {
+              setTimeout(() => {
+                wx.redirectTo({
+                  url: '../userLogin/login'
+                });
+              }, 2000);
+            }
           })
         }
       }
-    })
+    });
+
+    // 获取我的视频列表
+    that.getMyVideoList(1);
   },
   // 退出登陆
   logout: function () {
@@ -156,5 +216,42 @@ Page({
   uploadVideo: function () {
     // 上传视频
     videoUtil.uploadVideo();
+  },
+  // 获取我的视频列表
+  getMyVideoList: function (page) {
+    const that = this;
+
+    // 显示进度条
+    wx.showLoading();
+
+    const serverUrl = app.serverUrl;
+    // 获取我的视频列表
+    wx.request({
+      url: `${serverUrl}/video/showAll?page=${page}&pageSize=6`,
+      method: "POST",
+      data: {
+        userId: that.data.userId
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data);
+
+        // 隐藏进度条
+        wx.hideLoading();
+
+        // 合并新加载的视频与原来的视频列表
+        const myVideoList = res.data.data.rows;
+        const oldVideoList = that.data.myVideoList;
+
+        that.setData({
+          myVideoPage: page,
+          myVideoList: oldVideoList.concat(myVideoList),
+          myVideoTotal: res.data.data.total,
+          serverUrl: serverUrl
+        });
+      }
+    })
   }
 });
