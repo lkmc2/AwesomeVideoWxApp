@@ -299,6 +299,22 @@ Page({
             commentFocus: true
         });
     },
+    // 回复评论
+    replyFocus: function (e) {
+        // 父评论id
+        const fatherCommentId = e.currentTarget.dataset.fathercommentid;
+        // 被评论者id
+        const toUserId = e.currentTarget.dataset.touserid;
+        // 被评论者昵称
+        const toNickname = e.currentTarget.dataset.tonickname;
+
+        this.setData({
+            placeholder: '回复 ' + toNickname,
+            replyFatherCommentId: fatherCommentId,
+            replyToUserId: toUserId,
+            commentFocus: true // 聚焦到对话框
+        });
+    },
     // 保存用户评论
     saveComment: function (e) {
         const that = this;
