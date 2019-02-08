@@ -340,6 +340,33 @@ Page({
     // 获取收藏的视频列表
     this.getMyLikesList(1);
   },
+  // 选择关注的人发的视频标签
+  doSelectFollow: function () {
+    this.setData({
+      isSelectedWork: "",
+      isSelectedLike: "",
+      isSelectedFollow: "video-info-selected",
+
+      myWorkFalg: true,
+      myLikesFalg: true,
+      myFollowFalg: false,
+
+      myVideoList: [],
+      myVideoPage: 1,
+      myVideoTotal: 1,
+
+      likeVideoList: [],
+      likeVideoPage: 1,
+      likeVideoTotal: 1,
+
+      followVideoList: [],
+      followVideoPage: 1,
+      followVideoTotal: 1
+    });
+
+    // 获取我关注的视频列表
+    this.getMyFollowList(1)
+  },
   // 获取我的视频列表
   getMyVideoList: function (page) {
     const that = this;
@@ -410,6 +437,41 @@ Page({
           serverUrl: serverUrl
         });
       }
-    })
+    });
+  },
+  // 获取我关注的视频列表
+  getMyFollowList: function (page) {
+    const that = this;
+    const userId = that.data.userId;
+
+    // 显示进度条
+    wx.showLoading();
+
+    const serverUrl = app.serverUrl;
+    // 获取关注的视频列表
+    wx.request({
+      url: `${serverUrl}/video/showMyFollow?userId=${userId}&page=${page}&pageSize=6`,
+      method: "POST",
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data);
+
+        // 隐藏进度条
+        wx.hideLoading();
+
+        // 合并新加载的视频与原来的视频列表
+        const followVideoList = res.data.data.rows;
+        const oldVideoList = that.data.likeVideoList;
+
+        that.setData({
+          myVideoPage: page,
+          myVideoList: oldVideoList.concat(followVideoList),
+          myVideoTotal: res.data.data.total,
+          serverUrl: serverUrl
+        });
+      }
+    });
   }
 });
