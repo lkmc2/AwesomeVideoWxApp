@@ -13,7 +13,6 @@ Page({
     isFollow: false, // 是否关注该用户
     nickname: '', // 昵称
 
-
     fansCounts: 0, // 粉丝数
     followCounts: 0, // 关注数
     receiveLikeCounts: 0, // 收到的点赞数

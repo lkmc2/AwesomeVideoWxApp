@@ -24,10 +24,13 @@ Page({
     });
 
     // 搜索内容
-    const searchContent = params.search;
+    let searchContent = params.search;
     // 是否保存记录
     let isSaveRecord = params.isSaveRecord;
-    if (isSaveRecord === null || isSaveRecord === '' || isSaveRecord === undefined) {
+    if (!searchContent) {
+      searchContent = '';
+    }
+    if (!isSaveRecord) {
       isSaveRecord = 0;
     }
 
@@ -129,7 +132,7 @@ Page({
     // 将被点击的视频转换成字符串格式的json
     const videoInfo = JSON.stringify(videoList[arrIndex]);
 
-    wx.redirectTo({
+    wx.navigateTo({
       url: '../videoinfo/videoinfo?videoInfo=' + videoInfo
     })
   }
