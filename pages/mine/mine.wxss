@@ -2,6 +2,10 @@ page {
   font-size: 14px;
 }
 
+button {
+  overflow: unset;
+}
+
 .container {
   background-color: whitesmoke;
   display: flex;

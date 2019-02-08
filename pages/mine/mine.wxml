@@ -36,7 +36,7 @@
 
   <view class='container-video'>
     <!-- 发布过的作品 -->
-    <view class='{{videoSelClass}} {{isSelectedWord}}' bindtap='doSelectWork'>作品</view>
+    <view class="{{videoSelClass}} {{isSelectedWork}}" bindtap='doSelectWork'>作品</view>
     <!-- 收藏的点赞视频 -->
     <view class='{{videoSelClass}} {{isSelectedLike}}' bindtap='doSelectLike'>收藏</view>
     <!-- 用户关注过的人发表的视频 -->

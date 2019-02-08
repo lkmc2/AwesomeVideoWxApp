@@ -55,7 +55,7 @@ Page({
 
     // 请求视频分页数据
     wx.request({
-      url: `${serverUrl}/video/showAll?currentPage=${currentPage}&isSaveRecond=${isSaveRecond}`,
+      url: `${serverUrl}/video/showAll?currentPage=${currentPage}&isSaveRecord=${isSaveRecond}`,
       method: 'POST',
       data: {
         videoDesc: searchContent

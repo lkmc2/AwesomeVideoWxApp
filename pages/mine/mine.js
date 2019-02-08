@@ -235,8 +235,14 @@ Page({
           url: serverUrl + '/user/uploadFace?userId=' + userInfo.id,
           filePath: tempFilePaths[0],
           name: 'file',
+          header: {
+            'content-type': 'application/json', // 默认值
+            'headerUserId': userInfo.id,
+            'headerUserToken': userInfo.userToken
+          },
           success(res) {
             const data = JSON.parse(res.data);
+            console.log(data);
 
             // 隐藏进度条
             wx.hideLoading();
@@ -252,10 +258,23 @@ Page({
               that.setData({
                 faceUrl: serverUrl + imageUrl
               })
-            } else {
+            } else if (data.status === 500) {
               wx.showToast({
                 title: data.msg
-              })
+              });
+            } else {
+              wx.showToast({
+                title: res.data.msg,
+                duration: 2000,
+                icon: "none",
+                success: function () {
+                  setTimeout(() => {
+                    wx.redirectTo({
+                      url: '../userLogin/login',
+                    })
+                  }, 2000);
+                }
+              });
             }
           }
         })
@@ -266,6 +285,60 @@ Page({
   uploadVideo: function () {
     // 上传视频
     videoUtil.uploadVideo();
+  },
+  // 选择自己上传的作品的标签
+  doSelectWork: function () {
+    this.setData({
+      isSelectedWork: "video-info-selected",
+      isSelectedLike: "",
+      isSelectedFollow: "",
+
+      myWorkFalg: false,
+      myLikesFalg: true,
+      myFollowFalg: true,
+
+      myVideoList: [],
+      myVideoPage: 1,
+      myVideoTotal: 1,
+
+      likeVideoList: [],
+      likeVideoPage: 1,
+      likeVideoTotal: 1,
+
+      followVideoList: [],
+      followVideoPage: 1,
+      followVideoTotal: 1
+    });
+
+    // 获取自己上传的视频列表
+    this.getMyVideoList(1);
+  },
+  // 选择收藏的视频标签
+  doSelectLike: function () {
+    this.setData({
+      isSelectedWork: "",
+      isSelectedLike: "video-info-selected",
+      isSelectedFollow: "",
+
+      myWorkFalg: true,
+      myLikesFalg: false,
+      myFollowFalg: true,
+
+      myVideoList: [],
+      myVideoPage: 1,
+      myVideoTotal: 1,
+
+      likeVideoList: [],
+      likeVideoPage: 1,
+      likeVideoTotal: 1,
+
+      followVideoList: [],
+      followVideoPage: 1,
+      followVideoTotal: 1
+    });
+
+    // 获取收藏的视频列表
+    this.getMyLikesList(1);
   },
   // 获取我的视频列表
   getMyVideoList: function (page) {
@@ -298,6 +371,41 @@ Page({
         that.setData({
           myVideoPage: page,
           myVideoList: oldVideoList.concat(myVideoList),
+          myVideoTotal: res.data.data.total,
+          serverUrl: serverUrl
+        });
+      }
+    })
+  },
+  // 获取收藏的视频列表
+  getMyLikesList: function (page) {
+    const that = this;
+    const userId = that.data.userId;
+
+    // 显示进度条
+    wx.showLoading();
+
+    const serverUrl = app.serverUrl;
+    // 获取收藏的视频列表
+    wx.request({
+      url: `${serverUrl}/video/showMyLike?userId=${userId}&page=${page}&pageSize=6`,
+      method: "POST",
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data);
+
+        // 隐藏进度条
+        wx.hideLoading();
+
+        // 合并新加载的视频与原来的视频列表
+        const likeVideoList = res.data.data.rows;
+        const oldVideoList = that.data.likeVideoList;
+
+        that.setData({
+          myVideoPage: page,
+          myVideoList: oldVideoList.concat(likeVideoList),
           myVideoTotal: res.data.data.total,
           serverUrl: serverUrl
         });
