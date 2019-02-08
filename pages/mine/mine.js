@@ -96,7 +96,8 @@ Page({
             fansCounts: user.fansCounts,
             followCounts: user.followCounts,
             receiveLikeCounts: user.receiveLikeCounts,
-            isFollow: user.follow
+            isFollow: user.follow,
+            isSelectedWork: "video-info-selected"
           });
         } else {
           wx.showToast({
@@ -293,9 +294,9 @@ Page({
       isSelectedLike: "",
       isSelectedFollow: "",
 
-      myWorkFalg: false,
-      myLikesFalg: true,
-      myFollowFalg: true,
+      myWorkFlag: false,
+      myLikesFlag: true,
+      myFollowFlag: true,
 
       myVideoList: [],
       myVideoPage: 1,
@@ -320,9 +321,9 @@ Page({
       isSelectedLike: "video-info-selected",
       isSelectedFollow: "",
 
-      myWorkFalg: true,
-      myLikesFalg: false,
-      myFollowFalg: true,
+      myWorkFlag: true,
+      myLikesFlag: false,
+      myFollowFlag: true,
 
       myVideoList: [],
       myVideoPage: 1,
@@ -347,9 +348,9 @@ Page({
       isSelectedLike: "",
       isSelectedFollow: "video-info-selected",
 
-      myWorkFalg: true,
-      myLikesFalg: true,
-      myFollowFalg: false,
+      myWorkFlag: true,
+      myLikesFlag: true,
+      myFollowFlag: false,
 
       myVideoList: [],
       myVideoPage: 1,
@@ -404,7 +405,7 @@ Page({
       }
     })
   },
-  // 获取收藏的视频列表
+  // 获取点赞的视频列表
   getMyLikesList: function (page) {
     const that = this;
     const userId = that.data.userId;
@@ -473,5 +474,35 @@ Page({
         });
       }
     });
+  },
+  // 点击跳转到视频详情页面
+  showVideo: function (e) {
+    console.log(e);
+
+    // 以下分别是：我的上传的视频标签、我点赞过的视频标签、我订阅的人发的视频标签
+    // 标签被选中的时的值为false
+    const myWorkFlag = this.data.myWorkFlag;
+    const myLikesFlag = this.data.myLikesFlag;
+    const myFollowFlag = this.data.myFollowFlag;
+
+    // 根据标签选择视频列表
+    let videoList = [];
+    if (!myWorkFlag) {
+      videoList = this.data.myVideoList;
+    } else if (!myLikesFlag) {
+      videoList = this.data.likeVideoList;
+    } else if (!myFollowFlag) {
+      videoList = this.data.followVideoList;
+    }
+
+    // 用户点击的视频下标
+    const arrIndex = e.target.dataset.arrindex;
+    // 将视频信息转换成字符串
+    const videoInfo = JSON.stringify(videoList[arrIndex]);
+
+    // 跳转到视频详情页
+    wx.redirectTo({
+      url: '../videoinfo/videoinfo?videoInfo=' + videoInfo
+    })
   }
 });
