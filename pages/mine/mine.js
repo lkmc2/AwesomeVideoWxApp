@@ -432,9 +432,9 @@ Page({
         const oldVideoList = that.data.likeVideoList;
 
         that.setData({
-          myVideoPage: page,
-          myVideoList: oldVideoList.concat(likeVideoList),
-          myVideoTotal: res.data.data.total,
+          likeVideoPage: page,
+          likeVideoList: oldVideoList.concat(likeVideoList),
+          likeVideoTotal: res.data.data.total,
           serverUrl: serverUrl
         });
       }
@@ -464,12 +464,12 @@ Page({
 
         // 合并新加载的视频与原来的视频列表
         const followVideoList = res.data.data.rows;
-        const oldVideoList = that.data.likeVideoList;
+        const oldVideoList = that.data.followVideoList;
 
         that.setData({
-          myVideoPage: page,
-          myVideoList: oldVideoList.concat(followVideoList),
-          myVideoTotal: res.data.data.total,
+          followVideoPage: page,
+          followVideoList: oldVideoList.concat(followVideoList),
+          followVideoTotal: res.data.data.total,
           serverUrl: serverUrl
         });
       }
@@ -504,5 +504,66 @@ Page({
     wx.redirectTo({
       url: '../videoinfo/videoinfo?videoInfo=' + videoInfo
     })
+  },
+  // 到页面底部后触发
+  onReachBottom: function () {
+    // 以下分别是：我的上传的视频标签、我点赞过的视频标签、我订阅的人发的视频标签
+    // 标签被选中的时的值为false
+    const myWorkFlag = this.data.myWorkFlag;
+    const myLikesFlag = this.data.myLikesFlag;
+    const myFollowFlag = this.data.myFollowFlag;
+
+    if (!myWorkFlag) {
+      // 选中我的上传的视频标签
+      const currentPage = this.data.myVideoPage;
+      const totalPage = this.data.myVideoTotal;
+
+      // 获取总页数进行判断，如果当前页和总页数相等，则不分页
+      if (currentPage === totalPage) {
+        wx.showToast({
+          title: '已经没有视频啦…',
+          icon: "none"
+        });
+        return;
+      }
+
+      const page = currentPage + 1;
+      // 获取我上传的视频列表
+      this.getMyVideoList(page);
+    } else if (!myLikesFlag) {
+      // 选中我点赞过的视频标签
+      const currentPage = this.data.likeVideoPage;
+      const totalPage = this.data.likeVideoTotal;
+
+      // 获取总页数进行判断，如果当前页和总页数相等，则不分页
+      if (currentPage === totalPage) {
+        wx.showToast({
+          title: '已经没有视频啦…',
+          icon: "none"
+        });
+        return;
+      }
+
+      const page = currentPage + 1;
+      // 获取我点赞过的视频列表
+      this.getMyLikesList(page);
+    } else if (!myFollowFlag) {
+      // 选中我订阅的人发的视频标签
+      const currentPage = this.data.followVideoPage;
+      const totalPage = this.data.followVideoTotal;
+
+      // 获取总页数进行判断，如果当前页和总页数相等，则不分页
+      if (currentPage === totalPage) {
+        wx.showToast({
+          title: '已经没有视频啦…',
+          icon: "none"
+        });
+        return;
+      }
+
+      const page = currentPage + 1;
+      // 获取我关注的人发的视频列表
+      this.getMyFollowList(page);
+    }
   }
 });
