@@ -23,11 +23,17 @@
 
 ### 配套项目
 
-《倾心短视频》小程序需要与以下两个项目配套使用。
+《倾心短视频》微信小程序需要与以下两个项目配套使用。
 
-<a href="https://github.com/lkmc2/AwesomeVideo">后端服务</a>
+<a href="https://github.com/lkmc2/AwesomeVideo">后端API服务</a>
 
 <a href="https://github.com/lkmc2/AwesomeVideoAdmin">后台管理系统</a>
 
 <hr/>
 
+### 项目运行方式
+
+1. 先下载 <a href="https://github.com/lkmc2/AwesomeVideo">后端API服务</a> 的Java项目，按照该项目的提示配置好数据库后，启动Redis，并运行AwesomeVideoApplication.java启动项目。
+
+2. 下载本项目，然后使用 <a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html">微信web开发者工具</a> 打开本项目，编译后即可运行。
+3. 下载 <a href="https://github.com/lkmc2/AwesomeVideoAdmin">后台管理系统</a> 的Java项目，并运行AwesomeVideoAdminApplication.java启动项目。
