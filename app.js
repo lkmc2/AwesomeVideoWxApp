@@ -1,6 +1,6 @@
 //app.js
 App({
-  serverUrl: "http://192.168.199.213:8080",
+  serverUrl: "127.0.0.1:8080",
   userInfo: null,
   // 全局存储用户信息
   setGlobalUserInfo: function (user) {
